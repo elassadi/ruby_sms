@@ -2,6 +2,9 @@
 simple way to send sms using sms77 or any other short message api provider  
 A Ruby client library for [Sms77][more to come].
 
+**You will need a valid account with an api key to access the api endpoints**
+
+
 ## Getting started
 
 To install **ruby_sms**, run the following command:
