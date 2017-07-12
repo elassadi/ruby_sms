@@ -49,8 +49,9 @@ module RubySms
         request.set_form_data(
           text:  options[:text].force_encoding('utf-8'),
           to: 	 options[:to],
+          delay: options[:delay] || 0,
           debug: 0,
-          utf8: 1,
+          utf8:  1,
           u: user,
           p: api_key
         )
