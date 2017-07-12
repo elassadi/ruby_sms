@@ -20,7 +20,7 @@ to your `Gemfile`, and run `bundle install`
 
 ```ruby
 require "ruby_sms"
-sms = RubySms.new(key: "1234123", login: "user@email.com")
+sms = RubySms.new(api_key: "1234123", user: "user@email.com")
 response = sms.send(message: "your message", to: "+49178223", delay: false)
 if response.success? 
   puts "Sms deliverd " 
