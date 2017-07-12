@@ -1,5 +1,4 @@
 require 'rubygems'
-require 'pry'
 require 'logger'
 require 'gateway/sms77'
 require 'gateway/response'
