@@ -21,7 +21,7 @@ module RubySms
 
       def send(options)
         response = Sms77Response.new
-        (response.add_error(:empty_options) && (return response)) if options.nil?
+        (response.add_error(:empty_options) and (return response)) if options.nil?
         code = post_request(options)
         return response if code == SUCCESS_CODE
         response.add_error(code)
@@ -31,10 +31,10 @@ module RubySms
       # generate a simple random 4 digits pin
       def send_pin(options)
         response = Sms77Response.new
-        (response.add_error(:empty_options) && (return response)) if options.nil?
+        (response.add_error(:empty_options) and (return response)) if options.nil?
         # we may use SecureRandom.hex(size) if you need a more secure pin
         response.pin = rand.to_s[2..(DEFAULT_PIN_SIZE + 1)]
-        options[:text].gsub!('%PIN%', response.pin)
+        options[:text] = options[:text].gsub('%PIN%', response.pin)
         code = post_request(options)
         return response if code == SUCCESS_CODE
         response.add_error(code)
