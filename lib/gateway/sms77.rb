@@ -12,6 +12,8 @@ module RubySms
       DEFAULT_PIN_SIZE	= 4
 
       def initialize(options)
+        return if options.nil?
+        options.symbolize_keys!
         return if options[:user].nil?
         return if options[:api_key].nil?
 
@@ -20,6 +22,9 @@ module RubySms
       end
 
       def send(options)
+        return if options.nil?
+        options.symbolize_keys!
+
         response = Sms77Response.new
         (response.add_error(:empty_options) and (return response)) if options.nil?
         code = post_request(options)
@@ -30,6 +35,9 @@ module RubySms
 
       # generate a simple random 4 digits pin
       def send_pin(options)
+        return if options.nil?
+        options.symbolize_keys!
+
         response = Sms77Response.new
         (response.add_error(:empty_options) and (return response)) if options.nil?
         # we may use SecureRandom.hex(size) if you need a more secure pin
