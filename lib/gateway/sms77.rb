@@ -56,8 +56,12 @@ module RubySms
         request = Net::HTTP::Post.new(uri.to_s)
         request.set_form_data(
           text:  options[:text].force_encoding('utf-8'),
+          from:  options[:from],
           to: 	 options[:to],
           delay: options[:delay] || 0,
+          type:  options[:type] || 'direct',  # direct / economy
+          flash: options[:flash] || 0,        # 0 / 1
+          label:  options[:label],
           debug: 0,
           utf8:  1,
           u: user,
