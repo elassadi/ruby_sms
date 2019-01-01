@@ -16,7 +16,7 @@ To install **ruby_sms**, run the following command:
 Or if you are using **bundler**, add
 
 ```
-  gem 'ruby-sms', '~>1.0'
+  gem 'ruby_sms', '~>1.0'
 ```
 
 to your `Gemfile`, and run `bundle install`
