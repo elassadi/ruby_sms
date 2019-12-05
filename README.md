@@ -16,7 +16,7 @@ To install **ruby_sms**, run the following command:
 Or if you are using **bundler**, add
 
 ```
-  gem 'ruby-sms', '~>1.0'
+  gem 'ruby_sms', '~>1.0'
 ```
 
 to your `Gemfile`, and run `bundle install`
@@ -24,7 +24,7 @@ to your `Gemfile`, and run `bundle install`
 ```ruby
 require "ruby_sms"
 sms = RubySms.new(api_key: "1234123", user: "user@email.com")
-response = sms.send(message: "your message", to: "+49178223", delay: false)
+response = sms.send(text: "your message", to: "+49178223", delay: false)
 if response.success? 
   puts "Sms deliverd " 
 else
