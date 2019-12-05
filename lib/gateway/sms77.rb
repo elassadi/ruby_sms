@@ -58,8 +58,8 @@ module RubySms
           text:  options[:text].force_encoding('utf-8'),
           to: 	 options[:to],
           delay: options[:delay] || 0,
-          debug: 0,
-          utf8:  1,
+          debug: options[:debug] || 0,
+          utf8:  options[:utf8] || 1,
           u: user,
           p: api_key
         )
