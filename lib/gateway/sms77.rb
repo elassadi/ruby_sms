@@ -5,6 +5,19 @@ require 'uri'
 module RubySms
   module Gateway
     class Sms77
+      class Parameters < Hash
+        def initialize(options)
+          merge!(options)
+          symbolize_keys!
+        end
+
+        def symbolize_keys!
+          inject({}){|h,(k,v)| h.merge({ k.to_sym => v}) }
+        end
+      end
+
+      class ParameterError < StandardError ; end
+
       attr_accessor :api_key, :user
 
       SMS77_GATEWAY_URL = 'https://gateway.sms77.io/api/sms'.freeze
@@ -12,22 +25,23 @@ module RubySms
       DEFAULT_PIN_SIZE	= 4
 
       def initialize(options)
-        return if options.nil?
-        options.symbolize_keys!
-        return if options[:user].nil?
-        return if options[:api_key].nil?
+        raise ParameterError, 'no params given' if options.nil?
+        params = Parameters.new(options)
+        raise ParameterError, 'parameter :user is missing' if params[:user].nil?
+        raise ParameterError, 'parameter :api_key is missing' if params[:api_key].nil?
 
-        self.user = options[:user]
-        self.api_key = options[:api_key]
+        self.user = params[:user]
+        self.api_key = params[:api_key]
       end
 
       def send(options)
-        return if options.nil?
-        options.symbolize_keys!
+        raise ParameterError, 'no params given' if options.nil?
+        params = Parameters.new(options)
+        raise ParameterError, 'parameter :text is missing' if params[:text].nil?
 
         response = Sms77Response.new
-        (response.add_error(:empty_options) and (return response)) if options.nil?
-        code = post_request(options)
+        (response.add_error(:empty_options) and (return response)) if params.nil?
+        code = post_request(params)
         return response if code == SUCCESS_CODE
         response.add_error(code)
         response
@@ -35,15 +49,16 @@ module RubySms
 
       # generate a simple random 4 digits pin
       def send_pin(options)
-        return if options.nil?
-        options.symbolize_keys!
+        raise ParameterError, 'no params given' if options.nil?
+        params = Parameters.new(options)
+        raise ParameterError, 'parameter :text is missing' if params[:text].nil?
 
         response = Sms77Response.new
-        (response.add_error(:empty_options) and (return response)) if options.nil?
+        (response.add_error(:empty_options) and (return response)) if params.nil?
         # we may use SecureRandom.hex(size) if you need a more secure pin
         response.pin = rand.to_s[2..(DEFAULT_PIN_SIZE + 1)]
-        options[:text] = options[:text].gsub('%PIN%', response.pin)
-        code = post_request(options)
+        params[:text] = params[:text].gsub('%PIN%', response.pin)
+        code = post_request(params)
         return response if code == SUCCESS_CODE
         response.add_error(code)
         response
