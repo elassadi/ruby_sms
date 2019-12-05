@@ -60,10 +60,10 @@ module RubySms
           to: 	 options[:to],
           delay: options[:delay] || 0,
           type:  options[:type],
-          flash: options[:flash],
-          label:  options[:label],
-          debug: 0,
-          utf8:  1,
+          flash: options[:flash] || 0,
+          label:  options[:label] || '',
+          debug: options[:debug] || 0,
+          utf8:  options[:utf8] || 1,
           u: user,
           p: api_key
         )
