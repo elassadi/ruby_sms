@@ -1,5 +1,6 @@
 require 'net/http'
 require 'net/https'
+require 'json'
 require 'uri'
 
 module RubySms
@@ -68,8 +69,14 @@ module RubySms
 
       def post_request(options)
         uri = URI.parse(SMS77_GATEWAY_URL)
-        request = Net::HTTP::Post.new(uri.to_s)
-        request.set_form_data(
+
+        headers = {
+          "Content-Type" => "application/json",
+          "Authorization" => "Basic #{api_key}",
+        }
+
+        #request.set_form_data(
+        body = {
           text:  options[:text].force_encoding('utf-8'),
           from:  options[:from],
           to: 	 options[:to],
@@ -78,11 +85,16 @@ module RubySms
           flash: options[:flash] || 0,
           label:  options[:label] || '',
           debug: options[:debug] || 0,
-          utf8:  options[:utf8] || 1,
-          u: user,
-          p: api_key
-        )
-        response = https(uri).request(request)
+          utf8:  options[:utf8] || 1
+        }.to_json
+
+        request = Net::HTTP::Post.new(uri, headers)
+        request.body = body
+
+        response = Net::HTTP.start(uri.hostname, uri.port, use_ssl: uri.scheme == 'https') do |http|
+          http.request(request)
+        end
+
         response.body
       rescue StandardError => e
         RubySms.logger.error("Error while sending post request => #{e}")
